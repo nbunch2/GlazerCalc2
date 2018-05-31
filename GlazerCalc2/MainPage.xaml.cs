@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +23,55 @@ namespace GlazerCalc2
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        /*public enum TintOptions
+        {
+            black,
+            brown,
+            blue
+        }*/
+
+       // ObservableCollection<TintOptions> tints = new ObservableCollection<TintOptions>();
+
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+           
+            
+            
+
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var width = double.Parse(widthInput.Text);
+            var height = double.Parse(heightInput.Text);
+
+            var woodlength = 2 * (width * height) * 3.25;
+            var glassArea = 2 * (width * height);
+            var dateString = DateTime.Today.ToString("dd-MM-yyy");
+
+            //Display all the things
+            widthDisplay.Text = width.ToString("0.00");
+            heightDisplay.Text = height.ToString("0.00");
+            woodFrameDisplay.Text = woodlength.ToString("0.00");
+            areaDisplay.Text = glassArea.ToString("0.00");
+            dateDisplay.Text = dateString;
+        
+        }
+
+        private void QuantitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Slider sliderValue = sender as Slider;
+            if (sliderValue != null)
+            {
+                quantitySelected.Text = sliderValue.Value.ToString("0");
+            }
+            else
+            {
+                quantitySelected.Text = "";
+            }
+        }
+
+        
     }
 }
