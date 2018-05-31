@@ -34,7 +34,7 @@ namespace GlazerCalc2
 
         public MainPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
            
             
             
@@ -42,6 +42,21 @@ namespace GlazerCalc2
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            if( widthInput.Text == "" || heightInput.Text == "" || tintDropdown.SelectedValue == null)
+            {
+                errorBox.Text = "You must input a width, height and tint selection";
+            }
+            else
+            {
+                GetResult();
+            }
+           
+        
+        }
+
+        private void GetResult()
         {
             var width = double.Parse(widthInput.Text);
             var height = double.Parse(heightInput.Text);
@@ -51,26 +66,31 @@ namespace GlazerCalc2
             var dateString = DateTime.Today.ToString("dd-MM-yyy");
 
             //Display all the things
-            widthDisplay.Text = width.ToString("0.00");
+            widthDisplay.Text = width.ToString();
             heightDisplay.Text = height.ToString("0.00");
             woodFrameDisplay.Text = woodlength.ToString("0.00");
             areaDisplay.Text = glassArea.ToString("0.00");
+            tintSelected.Text = tintDropdown.SelectedValue.ToString();
+            //quantitySelected.Text = 
             dateDisplay.Text = dateString;
-        
         }
 
-        private void QuantitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Slider sliderValue = sender as Slider;
-            if (sliderValue != null)
-            {
-                quantitySelected.Text = sliderValue.Value.ToString("0");
-            }
-            else
-            {
-                quantitySelected.Text = "";
-            }
+            //quantityDisplay.Text = e.NewValue.ToString();
+            var sldrQuantity = sender as Slider;
+
+            var quantity = sldrQuantity.Value;
+
+            quantityDisplay.Text = quantity.ToString();
+
         }
+            // Slider sliderQuantity = sender as Slider;
+          
+                //quantitySelected.Text = sliderQuantity.Value.ToString("0");
+               // var quantity = sliderValue.Value.ToString(" ");
+
+        
 
         
     }
