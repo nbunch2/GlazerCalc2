@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -40,13 +41,18 @@ namespace GlazerCalc2
             
 
         }
+        private static bool IsTextAllowed(string text)
+        {
+            Regex regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
+            return !regex.IsMatch(text);
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            if( widthInput.Text == "" || heightInput.Text == "" || tintDropdown.SelectedValue == null)
+            if (widthInput.Text == "" || heightInput.Text == "" || tintDropdown.SelectedValue == null)
             {
-                errorBox.Text = "You must input a width, height and tint selection";
+                errorBox.Text = "You must input a width, height and tint";
             }
             else
             {
@@ -67,11 +73,11 @@ namespace GlazerCalc2
 
             //Display all the things
             widthDisplay.Text = width.ToString();
-            heightDisplay.Text = height.ToString("0.00");
+            heightDisplay.Text = height.ToString();
             woodFrameDisplay.Text = woodlength.ToString("0.00");
-            areaDisplay.Text = glassArea.ToString("0.00");
-            tintSelected.Text = tintDropdown.SelectedValue.ToString();
-            //quantitySelected.Text = 
+            areaDisplay.Text = glassArea.ToString();
+            tintSelected.Text = (tintDropdown.SelectedItem as ComboBoxItem).Content.ToString();
+            quantitySelected.Text = quantityDisplay.Text;
             dateDisplay.Text = dateString;
         }
 
@@ -85,13 +91,24 @@ namespace GlazerCalc2
             quantityDisplay.Text = quantity.ToString();
 
         }
-            // Slider sliderQuantity = sender as Slider;
-          
-                //quantitySelected.Text = sliderQuantity.Value.ToString("0");
-               // var quantity = sliderValue.Value.ToString(" ");
 
-        
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var combo = sender as ComboBox;
+            var selectedTint = combo.SelectedItem;
+            
+        }
 
-        
+        private void wInput_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            if (!Regex.IsMatch(sender.Text, "^\\d*\\.?\\d*$") && sender.Text != "")
+            {
+                int pos = sender.SelectionStart - 1;
+                sender.Text = sender.Text.Remove(pos, 1);
+                sender.SelectionStart = pos;
+                errorBox.Text = "Please Input only Numbers";
+            }
+
+        }
     }
 }
